@@ -1,0 +1,172 @@
+<div class="relative overflow-hidden min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500">
+  <div class="absolute inset-0 bg-parallax bg-center bg-cover bg-fixed"
+       style="background-image: url('https://images8.alphacoders.com/136/1363709.png');"></div>
+  <div class="relative flex flex-col items-center justify-center min-h-screen p-6">
+    <div class="bg-white bg-opacity-10 backdrop-filter rounded-3xl p-8 md:p-12 w-full max-w-4xl shadow-2xl border border-white border-opacity-20 transform transition-all duration-500 hover:scale-[1.02]">
+      <h1 class="text-4xl md:text-5xl font-extrabold text-white mb-12 text-center tracking-tight">
+        Gestión de Corrales y Animales
+      </h1>
+      <div class="flex flex-col items-center space-y-8">
+        <div *ngIf="!formToShow" class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-6">
+          <button 
+            (click)="showForm('corral')" 
+            class="group relative overflow-hidden bg-blue-800 text-white font-bold py-4 px-8 rounded-full shadow-2xl hover:bg-blue-700 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-opacity-50"
+          >
+            <span class="relative z-10">Crear Corral</span>
+            <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
+          </button>
+          <button 
+            (click)="showForm('animal')" 
+            class="group relative overflow-hidden bg-red-700 text-white font-bold py-4 px-8 rounded-full shadow-2xl hover:bg-red-600 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-400 focus:ring-opacity-50"
+          >
+            <span class="relative z-10">Crear Animal</span>
+            <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
+          </button>
+        </div>
+        <div *ngIf="formToShow" class="w-full bg-white p-8 rounded-2xl shadow-xl border border-gray-200 transition-all duration-500 ease-in-out transform hover:shadow-2xl">
+          <ng-container [ngSwitch]="formToShow">
+            <app-create-corral *ngSwitchCase="'corral'"></app-create-corral>
+            <app-create-animal *ngSwitchCase="'animal'"></app-create-animal>
+          </ng-container>
+          <div class="mt-8 flex justify-center">
+            <button 
+              (click)="goBack()" 
+              class="group relative overflow-hidden bg-blue-500 text-white font-bold py-3 px-6 rounded-full shadow-lg hover:bg-blue-400 transition duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+            >
+              <span class="relative z-10">Regresar</span>
+              <span class="absolute inset-0 bg-white opacity-0 group-hover:opacity-20 transition-opacity duration-300"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+<div class="min-h-screen bg-gradient-to-br from-black via-gray-900 to-pink-500 p-4 sm:p-6 lg:p-8 font-sans">
+  <div class="min-h-screen bg-gradient-to-br from-black via-gray-900 to-pink-500 p-4 sm:p-6 lg:p-8 font-sans">
+    <div class="max-w-7xl mx-auto bg-white bg-opacity-5 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-white border-opacity-30">
+      <div class="lg:flex">
+        <div class="lg:w-1/3 p-6 lg:p-8 bg-black bg-opacity-40">
+          <h2 class="text-4xl font-extrabold text-white mb-6 tracking-tight">Seleccionar Corral</h2>
+          <div class="relative">
+            <select 
+              (change)="onCorralChange($event)" 
+              class="block w-full px-4 py-3 border border-white border-opacity-40 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 transition ease-in-out duration-300 appearance-none text-lg bg-white bg-opacity-20 text-white placeholder-gray-300"
+            >
+              <option value="" disabled selected>Selecciona un corral</option>
+              <option *ngFor="let corral of corrals" [value]="corral.id">{{ corral.name }}</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-white">
+              <svg class="fill-current h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+        <div class="lg:w-2/3 p-6 lg:p-8 bg-black bg-opacity-40">
+          <h2 class="text-4xl font-extrabold text-white mb-6 tracking-tight">Animales en el Corral</h2>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div *ngFor="let animal of animals" class="bg-white bg-opacity-10 rounded-xl p-6 transform transition duration-500 hover:scale-105 hover:bg-opacity-20 hover:shadow-xl">
+              <div class="flex items-center justify-between mb-4">
+                <span class="text-xl font-semibold text-white">{{ animal.name }}</span>
+              </div>
+              <div class="text-white opacity-90">
+                <p>ID: {{ animal.id }}</p>
+                <p>Edad: {{ animal.age }} años</p>
+              </div>
+            </div>
+            <div *ngIf="animals.length === 0" class="col-span-full text-center text-white text-xl opacity-80">
+              No hay animales registrados en este corral.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div class="max-w-7xl mx-auto bg-white bg-opacity-5 backdrop-filter backdrop-blur-lg rounded-3xl shadow-2xl overflow-hidden border border-white border-opacity-30 mt-6">
+      <div class="lg:flex">
+        <div class="lg:w-full p-6 lg:p-8 bg-black bg-opacity-40">
+          <h2 class="text-4xl font-extrabold text-white mb-6 tracking-tight">Animales Riesgosos</h2>
+          
+          <table class="min-w-full text-white" *ngIf="highRiskAnimals.length > 0">
+            <thead class="bg-gray-800 bg-opacity-80">
+              <tr>
+                <th class="p-3 text-left">ID</th>
+                <th class="p-3 text-left">Nombre</th>
+                <th class="p-3 text-left">Edad</th>
+                <th class="p-3 text-left">Peligrosidad</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let animal of highRiskAnimals" class="bg-red-600 bg-opacity-30">
+                <td class="p-3">{{ animal.id }}</td>
+                <td class="p-3">{{ animal.name }}</td>
+                <td class="p-3">{{ animal.age }} años</td>
+                <td class="p-3">
+                  <span class="px-3 py-1 rounded-full text-xs font-medium bg-red-400 text-white">Peligroso</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div *ngIf="highRiskAnimals.length === 0" class="col-span-full text-center text-white text-xl opacity-80">
+            No hay animales peligrosos registrados en este corral.
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  
+</div>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .bg-gradient-to-br {
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+  }
+
+  @keyframes gradient {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+
+  select option {
+    color: #4a5568;
+    background-color: white;
+  }
+
+  .bg-red-500 {
+    background-color: #EF4444;
+  }
+
+  .bg-cyan-500 {
+    background-color: #06B6D4;
+  }
+
+  .text-white {
+    color: #FFFFFF;
+  }
+
+  .focus:ring-cyan-400 {
+    box-shadow: 0 0 0 4px rgba(6, 182, 212, 0.5);
+  }
+</style>
